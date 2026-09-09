@@ -195,6 +195,35 @@ def diptych_headline_bleed() -> None:
     save(Image.alpha_composite(image, layer), "23-layout-diptych-headline-bleed.png")
 
 
+def diptych_headline_bleed_offer_readable() -> None:
+    split = 518
+    source = base_image("exec-0fe38914-fb4a-42b9-b111-f31859d4d985.png").convert("RGBA")
+    image = Image.new("RGBA", (W, H), (7, 18, 39, 255))
+    visual = ImageOps.fit(source, (W - split, H), method=Image.Resampling.LANCZOS, centering=(0.58, 0.5))
+    image.alpha_composite(visual, (split, 0))
+    header = Image.new("RGBA", (W, 390), (0, 0, 0, 0))
+    header_pixels = header.load()
+    for x in range(780):
+        alpha = int(230 * (1 - x / 780) ** 1.45)
+        for y in range(390):
+            header_pixels[x, y] = (7, 18, 39, alpha)
+    image.alpha_composite(header)
+    layer = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    draw = ImageDraw.Draw(layer)
+    cream, amber, navy = (255, 250, 236, 255), (238, 193, 100, 255), (7, 18, 39, 255)
+    draw.line((split, 430, split, 1258), fill=amber, width=3)
+    text(draw, (54, 94), TITLE, 47, cream, stroke=navy, width=3)
+    text_in_column(draw, (56, 250), "1 СТУПЕНЬ", 27, amber, split - 18, stroke=navy, width=2)
+    text_in_column(draw, (56, 330), "ТОНКО ЧУВСТВОВАТЬ\nЯСНО ВИДЕТЬ\nЯСНО ЗНАТЬ", 32, cream, split - 18, stroke=navy, width=2, spacing=8, typeface=CURRENCY_BOLD)
+    text_in_column(draw, (56, 455), OFFER, 30, cream, split - 18, stroke=navy, width=2)
+    text_in_column(draw, (56, 570), "26–27 СЕНТЯБРЯ\n10:00–19:00\nЕКАТЕРИНБУРГ", 27, cream, split - 18, stroke=navy, width=2)
+    text_in_column(draw, (56, 710), "ТАТЬЯНА НОВОСЕЛОВА\nМастер Академии\nРазвития Человека", 27, cream, split - 18, stroke=navy, width=2)
+    text_in_column(draw, (56, 865), "СТОИМОСТЬ\nдо 10.09 — 25 000 ₽\nпосле — 27 000 ₽\nв день — 30 000 ₽", 27, amber, split - 18, stroke=navy, width=2, typeface=CURRENCY_BOLD)
+    text_in_column(draw, (56, 1045), "ЗАПИСЬ: +7 (912)\n633-11-18", 27, cream, split - 18, stroke=navy, width=2)
+    text_in_column(draw, (56, 1195), "ул. 8 Марта,\n194Б · код 7#777", 27, cream, split - 18, stroke=navy, width=2)
+    save(Image.alpha_composite(image, layer), "24-layout-diptych-headline-bleed-offer-readable.png")
+
+
 if __name__ == "__main__":
     editorial_column()
     cinematic_poster()
@@ -203,4 +232,5 @@ if __name__ == "__main__":
     orbital()
     diptych_strict()
     diptych_headline_bleed()
+    diptych_headline_bleed_offer_readable()
     print(OUT)
