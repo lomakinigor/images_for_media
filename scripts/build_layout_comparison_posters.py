@@ -98,7 +98,7 @@ def scene_integrated() -> None:
 def diptych() -> None:
     source = base_image("exec-530cd1a1-b74e-456a-96ca-9d8029f86fbe.png").convert("RGBA")
     image = Image.new("RGBA", (W, H), (8, 18, 39, 255))
-    right = source.crop((180, 0, W, H)).resize((540, H), Image.Resampling.LANCZOS)
+    right = ImageOps.fit(source, (540, H), method=Image.Resampling.LANCZOS, centering=(0.58, 0.5))
     image.alpha_composite(right, (540, 0))
     seam = Image.new("RGBA", (W, H), (0, 0, 0, 0))
     draw_seam = ImageDraw.Draw(seam)
