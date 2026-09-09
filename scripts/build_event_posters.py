@@ -43,16 +43,19 @@ def draw_centered(draw: ImageDraw.ImageDraw, text: str, y: int, fnt, fill, spaci
 def add_copy(image: Image.Image, panel_color, text_color) -> Image.Image:
     layer = Image.new("RGBA", (W, H), (0, 0, 0, 0))
     draw = ImageDraw.Draw(layer)
-    draw.rounded_rectangle((42, 36, W - 42, 400), radius=28, fill=panel_color)
-    draw.rounded_rectangle((42, H - 190, W - 42, H - 42), radius=24, fill=panel_color)
+    draw.rounded_rectangle((42, 36, W - 42, 486), radius=28, fill=panel_color)
+    draw.rounded_rectangle((42, H - 142, W - 42, H - 42), radius=24, fill=panel_color)
 
-    y = draw_centered(draw, "ОБУЧЕНИЕ\nСВЕРХСПОСОБНОСТЯМ", 70, font(BOLD, 58), text_color, 0)
-    y += 13
-    draw_centered(draw, "1 СТУПЕНЬ · СЕМИНАР-ПРАКТИКУМ", y, font(BOLD, 24), text_color)
-    y += 53
-    draw_centered(draw, "26–27 СЕНТЯБРЯ · 10:00–19:00", y, font(BOLD, 30), text_color)
-    draw_centered(draw, "ЕКАТЕРИНБУРГ · 8 МАРТА, 194Б", H - 164, font(BOLD, 25), text_color)
-    draw_centered(draw, "ОТ 25 000 ₽ · +7 912 633-11-18", H - 111, font(BOLD, 26), text_color)
+    y = draw_centered(draw, "ОБУЧЕНИЕ\nСВЕРХСПОСОБНОСТЯМ", 63, font(BOLD, 57), text_color, 0)
+    y += 7
+    y = draw_centered(draw, "1 СТУПЕНЬ", y, font(BOLD, 23), text_color)
+    y += 15
+    y = draw_centered(draw, "СТАТЬ ЭКСТРАСЕНСОМ\nЗА 2 ДНЯ!", y, font(BOLD, 31), text_color, 2)
+    y += 18
+    y = draw_centered(draw, "26–27 СЕНТЯБРЯ · 10:00–19:00\nЕКАТЕРИНБУРГ", y, font(BOLD, 25), text_color, 6)
+    y += 16
+    draw_centered(draw, "ВЕДУЩАЯ: ТАТЬЯНА НОВОСЕЛОВА\nМАСТЕР АКАДЕМИИ РАЗВИТИЯ ЧЕЛОВЕКА", y, font(BOLD, 21), text_color, 5)
+    draw_centered(draw, "ул. 8 Марта, 194Б · код 7#777", H - 108, font(BOLD, 22), text_color)
     return Image.alpha_composite(image.convert("RGBA"), layer)
 
 
