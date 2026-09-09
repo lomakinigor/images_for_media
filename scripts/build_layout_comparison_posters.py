@@ -18,6 +18,13 @@ def text(draw: ImageDraw.ImageDraw, xy, value: str, size: int, color, *, anchor=
     draw.multiline_text(xy, value, font=font(BOLD, size), fill=color, anchor=anchor, align=align, spacing=spacing, stroke_width=width, stroke_fill=stroke)
 
 
+def text_in_column(draw: ImageDraw.ImageDraw, xy, value: str, size: int, color, max_right: int, *, stroke=(0, 0, 0, 0), width=0, spacing=4):
+    bounds = draw.multiline_textbbox(xy, value, font=font(BOLD, size), spacing=spacing, stroke_width=width)
+    if bounds[2] > max_right:
+        raise ValueError(f"Text exceeds column: {value!r}")
+    text(draw, xy, value, size, color, stroke=stroke, width=width, spacing=spacing)
+
+
 def left_gradient(color: tuple[int, int, int]) -> Image.Image:
     layer = Image.new("RGBA", (W, H), (0, 0, 0, 0))
     pixels = layer.load()
@@ -176,11 +183,11 @@ def diptych_headline_bleed() -> None:
     cream, amber, navy = (255, 250, 236, 255), (238, 193, 100, 255), (7, 18, 39, 255)
     draw.line((split, 430, split, 1258), fill=amber, width=3)
     text(draw, (54, 94), TITLE, 47, cream, stroke=navy, width=3)
-    text(draw, (56, 284), "1 СТУПЕНЬ", 27, amber, stroke=navy, width=2)
-    text(draw, (56, 475), OFFER, 34, cream, stroke=navy, width=2)
-    text(draw, (56, 698), DATE, 28, cream, stroke=navy, width=2)
-    text(draw, (56, 900), HOST, 25, cream, stroke=navy, width=2)
-    text(draw, (56, 1260), "ул. 8 Марта,\n194Б · код 7#777", 27, cream, stroke=navy, width=2)
+    text_in_column(draw, (56, 284), "1 СТУПЕНЬ", 27, amber, split - 18, stroke=navy, width=2)
+    text_in_column(draw, (56, 475), OFFER, 30, cream, split - 18, stroke=navy, width=2)
+    text_in_column(draw, (56, 698), "26–27 СЕНТЯБРЯ\n10:00–19:00\nЕКАТЕРИНБУРГ", 27, cream, split - 18, stroke=navy, width=2)
+    text_in_column(draw, (56, 900), "ТАТЬЯНА НОВОСЕЛОВА\nМастер Академии\nРазвития Человека", 25, cream, split - 18, stroke=navy, width=2)
+    text_in_column(draw, (56, 1260), "ул. 8 Марта,\n194Б · код 7#777", 27, cream, split - 18, stroke=navy, width=2)
     save(Image.alpha_composite(image, layer), "23-layout-diptych-headline-bleed.png")
 
 
