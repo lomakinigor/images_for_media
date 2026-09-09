@@ -138,10 +138,58 @@ def orbital() -> None:
     save(Image.alpha_composite(image, layer), "21-layout-orbital.png")
 
 
+def diptych_strict() -> None:
+    split = 640
+    image = Image.new("RGBA", (W, H), (8, 18, 39, 255))
+    source = base_image("exec-530cd1a1-b74e-456a-96ca-9d8029f86fbe.png").convert("RGBA")
+    visual = ImageOps.fit(source, (W - split, H), method=Image.Resampling.LANCZOS, centering=(0.58, 0.5))
+    image.alpha_composite(visual, (split, 0))
+    layer = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    draw = ImageDraw.Draw(layer)
+    cream, amber, navy = (255, 250, 236, 255), (238, 193, 100, 255), (8, 18, 39, 255)
+    draw.line((split, 92, split, 1258), fill=amber, width=3)
+    text(draw, (54, 92), TITLE, 38, cream, stroke=navy, width=2)
+    draw.rounded_rectangle((56, 220, 330, 226), radius=3, fill=amber)
+    text(draw, (56, 258), "1 СТУПЕНЬ", 27, amber, stroke=navy, width=2)
+    text(draw, (56, 374), OFFER, 34, cream, stroke=navy, width=2)
+    text(draw, (56, 648), DATE, 28, cream, stroke=navy, width=2)
+    text(draw, (56, 868), HOST, 25, cream, stroke=navy, width=2)
+    text(draw, (56, 1260), "ул. 8 Марта,\n194Б · код 7#777", 27, cream, stroke=navy, width=2)
+    save(Image.alpha_composite(image, layer), "22-layout-diptych-strict.png")
+
+
+def diptych_headline_bleed() -> None:
+    split = 518
+    source = base_image("exec-0fe38914-fb4a-42b9-b111-f31859d4d985.png").convert("RGBA")
+    image = Image.new("RGBA", (W, H), (7, 18, 39, 255))
+    visual = ImageOps.fit(source, (W - split, H), method=Image.Resampling.LANCZOS, centering=(0.58, 0.5))
+    image.alpha_composite(visual, (split, 0))
+    header = Image.new("RGBA", (W, 390), (0, 0, 0, 0))
+    header_pixels = header.load()
+    for x in range(780):
+        alpha = int(230 * (1 - x / 780) ** 1.45)
+        for y in range(390):
+            header_pixels[x, y] = (7, 18, 39, alpha)
+    image.alpha_composite(header)
+    layer = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    draw = ImageDraw.Draw(layer)
+    cream, amber, navy = (255, 250, 236, 255), (238, 193, 100, 255), (7, 18, 39, 255)
+    draw.line((split, 430, split, 1258), fill=amber, width=3)
+    text(draw, (54, 94), TITLE, 47, cream, stroke=navy, width=3)
+    text(draw, (56, 284), "1 СТУПЕНЬ", 27, amber, stroke=navy, width=2)
+    text(draw, (56, 475), OFFER, 34, cream, stroke=navy, width=2)
+    text(draw, (56, 698), DATE, 28, cream, stroke=navy, width=2)
+    text(draw, (56, 900), HOST, 25, cream, stroke=navy, width=2)
+    text(draw, (56, 1260), "ул. 8 Марта,\n194Б · код 7#777", 27, cream, stroke=navy, width=2)
+    save(Image.alpha_composite(image, layer), "23-layout-diptych-headline-bleed.png")
+
+
 if __name__ == "__main__":
     editorial_column()
     cinematic_poster()
     scene_integrated()
     diptych()
     orbital()
+    diptych_strict()
+    diptych_headline_bleed()
     print(OUT)
